@@ -1,1 +1,1 @@
-setView('small');
+//setView('small');

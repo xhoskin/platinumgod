@@ -219,24 +219,6 @@ $(document).ready(function(e) {
 	$('.pool-btn').click(function(e){
 		$('.option-pools').toggle();
 	});
-	$('.pool-itm').click(function(e){$('.search input').val('item room pool');$('.search input').trigger('keyup');});
-	$('.pool-shop').click(function(e){$('.search input').val('shop room pool');$('.search input').trigger('keyup');});
-	$('.pool-boss').click(function(e){$('.search input').val('boss room pool');$('.search input').trigger('keyup');});
-	$('.pool-devil').click(function(e){$('.search input').val('devil room pool');$('.search input').trigger('keyup');});
-
-	$('.pool-angel').click(function(e){$('.search input').val('angel room pool');$('.search input').trigger('keyup');});
-	$('.pool-secret').click(function(e){$('.search input').val('secret room pool');$('.search input').trigger('keyup');});
-	$('.pool-lib').click(function(e){$('.search input').val('library pool');$('.search input').trigger('keyup');});
-	$('.pool-gold').click(function(e){$('.search input').val('golden chest pool');$('.search input').trigger('keyup');});
-
-	$('.pool-red').click(function(e){$('.search input').val('red chest pool');$('.search input').trigger('keyup');});
-	$('.pool-curse').click(function(e){$('.search input').val('curse room pool');$('.search input').trigger('keyup');});
-	$('.pool-nbeggar').click(function(e){$('.search input').val('normal beggar pool');$('.search input').trigger('keyup');});
-	$('.pool-dbeggar').click(function(e){$('.search input').val('demon beggar pool');$('.search input').trigger('keyup');});
-
-	$('.pool-kbeggar').click(function(e){$('.search input').val('key beggar');$('.search input').trigger('keyup');});
-	$('.pool-brush').click(function(e){$('.search input').val('boss rush pool');$('.search input').trigger('keyup');});
-	$('.pool-dung').click(function(e){$('.search input').val('challenge room pool');$('.search input').trigger('keyup');});
 
 }); // end document .ready
 
@@ -302,6 +284,8 @@ function rndSound() {
 }
 
 // xhoskin functions
+
+// items view
 var setView = function(newView) {
     var oldView;
     var $items;
@@ -319,6 +303,7 @@ var setView = function(newView) {
         .addClass(newView);
 }
 
+// items sorting
 var setSort = function() {
     if($('#itemid').is(':checked')){
         $('.textbox').tsort({attr:'data-sid'});
@@ -330,6 +315,27 @@ var setSort = function() {
     }
 }
 
+// quick filters
+var Filter = +function() {
+    var $filter = $('.search input');
+    var $tags = $('.option-pools__item');
+
+    var result = {
+        find: function(query) {
+            $filter.val(query);
+            $filter.trigger('keyup');
+        }
+    }
+
+    // events binding
+    $tags.click(function(e) {
+        e.preventDefault();
+        var query = $(this).data('query');
+        result.find(query);
+    })
+
+    return result;
+}();
 
 var setSettings = function(settings){
     setSort();
