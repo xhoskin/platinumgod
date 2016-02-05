@@ -191,8 +191,18 @@ $(document).ready(function(e) {
 		}
 
 		markup += '<a class="pp-close" onclick="closepp()">x</a>';
+
+        var $item = $(markup).find('.item-title');
+        var txt = $item[0];
+        var url = $item[0].innerHTML.replace(/\s/g, '+');
+        var link = '<a href="http://bindingofisaacrebirth.gamepedia.com/index.php?search='+txt+' target="_blank">'+txt+'</a>';
+        $item[0].innerHTML = link;
+
+
 		var node = document.getElementById("popup");
-		node.innerHTML = markup;
+		node.innerHTML = $markup.eq(1).html();
+        debugger;
+
 		$('.itm-popup').slideDown();
 		$('.overlay').fadeIn();
 	});
