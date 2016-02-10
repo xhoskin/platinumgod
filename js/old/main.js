@@ -50,6 +50,12 @@ function initpp() {
 	}
 }
 
+// returns link for search query on http://bindingofisaacrebirth.gamepedia.com/
+function gamepediaLink(query){
+    var queryFormatted = query.replace(/\s/g, '+');
+    return '<a href="http://bindingofisaacrebirth.gamepedia.com/index.php?search=' + queryFormatted + '" target="_blank">' + query + '</a>';
+}
+
 
 initpp();
 
@@ -176,9 +182,15 @@ $(document).ready(function(e) {
 		$('#countdown').slideUp();
 		sC('nowarn','y',365);
 	});
+
 	$('.textbox').click(function(e){
-		var val = $(this).data('sid');
 		var markup = '';
+		var val = $(this).data('sid');
+		var $node = $("#popup");
+        var $markup;
+        var $item;
+        var query;
+        var link;
 
 		if (val == 278) {
 			markup = $(this).children().html() + '<a id="DankBumLink" href="dark-bum"></a>';
@@ -192,16 +204,13 @@ $(document).ready(function(e) {
 
 		markup += '<a class="pp-close" onclick="closepp()">x</a>';
 
-        var $item = $(markup).find('.item-title');
-        var txt = $item[0];
-        var url = $item[0].innerHTML.replace(/\s/g, '+');
-        var link = '<a href="http://bindingofisaacrebirth.gamepedia.com/index.php?search='+txt+' target="_blank">'+txt+'</a>';
-        $item[0].innerHTML = link;
+        $markup = $(markup);
+        $item = $markup.find('.item-title');
+        query = $item[0].innerHTML;
+        link = gamepediaLink(query);
 
-
-		var node = document.getElementById("popup");
-		node.innerHTML = $markup.eq(1).html();
-        debugger;
+        $item.html(link);
+		$node.html($markup);
 
 		$('.itm-popup').slideDown();
 		$('.overlay').fadeIn();
