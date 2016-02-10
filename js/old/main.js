@@ -63,7 +63,7 @@ $(document).ready(function(e) {
       return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
   	};
 	function filterList(list) {
-		var form = $("header .container .search form");
+		var form = $(".search-form");
 			input = $(".search-input");
 
 		$(form).on('submit', function(event){
@@ -94,7 +94,7 @@ $(document).ready(function(e) {
 	// input 'x' to clear text
 	function tog(v){return v?'addClass':'removeClass';}
 
-	$(document).on('input', 'header .container .search input[type=text]', function(){
+	$(document).on('input', '.search-input', function(){
 		$(this)[tog(this.value)]('x');
 	}).on('mousemove', '.x', function( e ){
 		$(this)[tog(this.offsetWidth-30 < e.clientX-this.getBoundingClientRect().left)]('onX');
