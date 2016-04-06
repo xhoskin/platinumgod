@@ -50,6 +50,12 @@ function initpp() {
 	}
 }
 
+// returns link for search query on http://bindingofisaacrebirth.gamepedia.com/
+function gamepediaLink(query){
+    var queryFormatted = query.replace(/\s/g, '+');
+    return '<a href="http://bindingofisaacrebirth.gamepedia.com/index.php?search=' + queryFormatted + '" target="_blank">' + query + '</a>';
+}
+
 
 initpp();
 
@@ -63,7 +69,7 @@ $(document).ready(function(e) {
       return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
   	};
 	function filterList(list) {
-		var form = $("header .container .search form");
+		var form = $(".search-form");
 			input = $(".search-input");
 
 		$(form).on('submit', function(event){
@@ -94,7 +100,7 @@ $(document).ready(function(e) {
 	// input 'x' to clear text
 	function tog(v){return v?'addClass':'removeClass';}
 
-	$(document).on('input', 'header .container .search input[type=text]', function(){
+	$(document).on('input', '.search-input', function(){
 		$(this)[tog(this.value)]('x');
 	}).on('mousemove', '.x', function( e ){
 		$(this)[tog(this.offsetWidth-30 < e.clientX-this.getBoundingClientRect().left)]('onX');
@@ -176,9 +182,15 @@ $(document).ready(function(e) {
 		$('#countdown').slideUp();
 		sC('nowarn','y',365);
 	});
+
 	$('.textbox').click(function(e){
-		var val = $(this).data('sid');
 		var markup = '';
+		var val = $(this).data('sid');
+		var $node = $("#popup");
+        var $markup;
+        var $item;
+        var query;
+        var link;
 
 		if (val == 278) {
 			markup = $(this).children().html() + '<a id="DankBumLink" href="dark-bum"></a>';
@@ -191,8 +203,15 @@ $(document).ready(function(e) {
 		}
 
 		markup += '<a class="pp-close" onclick="closepp()">x</a>';
-		var node = document.getElementById("popup");
-		node.innerHTML = markup;
+
+        $markup = $(markup);
+        $item = $markup.find('.item-title');
+        query = $item[0].innerHTML;
+        link = gamepediaLink(query);
+
+        $item.html(link);
+		$node.html($markup);
+
 		$('.itm-popup').slideDown();
 		$('.overlay').fadeIn();
 	});
