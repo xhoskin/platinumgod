@@ -70,22 +70,36 @@ $(document).ready(function(e) {
   	};
 	function filterList(list) {
 		var form = $(".search-form");
-			input = $(".search-input");
+        var input = $(".search-input");
+        
+        list = list.find('li');
 
 		$(form).on('submit', function(event){
 			event.preventDefault();
 		});
 
 		$(input).change(function() {
-			var filter = $(this).val();
-			if (filter) {
-				$matches = $(list).find('a:Contains(' + filter + ')').parent();
-                $('li', list).not($matches).hide();
+			var textInFilter = $(this).val();
+            var $matches;
+			if (textInFilter || Filter.currentPool) {
+                $matches = $(list);
+                if (textInFilter) {
+                    $matches = $matches.filter(function(i, el) {
+                        return $(el).find('a:Contains('+textInFilter+')').length;
+                    });
+                }
+                if ( Filter.currentPool ) {
+                    $matches = $matches.filter(function(i, el) {
+                        return $(el).find('ul p:Contains(Item Pool):Contains('+Filter.currentPool+')').length;
+                    });
+                }
+
+                $(list).not($matches).hide();
 				$matches.show();
 				$matches.removeClass('fade');
 			} else {
-				$(list).find("li").show();
-				$(list).find("li").removeClass('fade');
+				$(list).show();
+				$(list).removeClass('fade');
 			}
 			return false;
 		})
@@ -335,11 +349,14 @@ var setSort = function() {
 }
 
 // quick filters
-var Filter = +function() {
-    var $filter = $('.search input');
-    var $tags = $('.option-pools__item');
+var Filter = (function() {
+    var $filter  = $('.search input');
+    var $buttons = $('.option-pools__item');
+    var $pools   = $buttons.filter('[data-pool]');
+    var $tags    = $filter.filter('[data-tag]');
 
     var result = {
+        currentPool: null,
         find: function(query) {
             $filter.val(query);
             $filter.trigger('keyup');
@@ -351,10 +368,17 @@ var Filter = +function() {
         e.preventDefault();
         var query = $(this).data('query');
         result.find(query);
-    })
+    });
+
+    $pools.click(function(e) {
+        e.preventDefault();
+        var pool = $(this).data('pool');
+        result.currentPool = pool;
+        $filter.trigger('keyup');
+    });
 
     return result;
-}();
+})();
 
 var setSettings = function(settings){
     setSort();
